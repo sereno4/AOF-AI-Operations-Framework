@@ -5,48 +5,50 @@ AI Operations Framework for Kubernetes Security
 Multi-agent platform combining eBPF telemetry, Zero Trust analysis,
 LLM-driven policy generation and Infrastructure as Code.
 
-flowchart LR
+```mermaid
+flowchart TB
 
-    subgraph Telemetry
-        F[Falco]
-        C[Cilium]
-        H[Hubble]
+    subgraph Kubernetes Cluster
+        F["Falco Runtime Security"]
+        C["Cilium eBPF"]
+        H["Hubble Flows"]
     end
 
-    subgraph Agents
-        S[SRE]
-        SE[Security]
-        ZT[Zero Trust]
-        P[Policy Generator]
-        CO[Correlation]
+    subgraph AOF Platform
+        SRE["SRE-FinOps"]
+        SEC["Security"]
+        CORR["Correlation"]
+        ZT["Zero Trust"]
+        POL["Policy Generator"]
     end
 
-    subgraph AI
-        G[Groq]
-        PH[Phoenix]
+    subgraph AI & Observability
+        G["Groq"]
+        PH["Arize Phoenix"]
     end
 
     subgraph IaC
-        TF[OpenTofu]
+        TF["OpenTofu"]
     end
 
-    F --> SE
-    C --> SE
-    H --> P
+    F --> SEC
+    C --> SEC
 
-    S --> CO
-    SE --> CO
+    SEC --> CORR
+    SRE --> CORR
 
-    SE --> ZT
+    F --> ZT
+    C --> ZT
     H --> ZT
 
-    P --> G
+    H --> POL
+    POL --> G
 
-    CO --> PH
+    CORR --> PH
     ZT --> PH
 
     TF --> C
-
+```
 
     AOF continuously evaluates Kubernetes runtime security posture using
 specialized agents that consume Falco alerts, Cilium policies and Hubble
