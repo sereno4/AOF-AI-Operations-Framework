@@ -1,185 +1,107 @@
-AOF — AI Operations Framework
-Multi-Agent Security Operations Platform for Kubernetes
+# AOF
 
-AI-driven security operations combining Falco, Cilium, Hubble, OpenTofu, and LLM-powered agents for continuous Zero Trust assessment and automated remediation.
+AI Operations Framework for Kubernetes Security
 
+Multi-agent platform combining eBPF telemetry, Zero Trust analysis,
+LLM-driven policy generation and Infrastructure as Code.
 
+flowchart LR
 
-
-
-
-
-
-
-Overview
-
-AOF is a multi-agent security platform designed for Kubernetes environments.
-
-The platform continuously analyzes runtime activity, network flows, RBAC permissions, and infrastructure posture using specialized A2A agents that collaborate to generate actionable security insights.
-
-All security controls are managed through OpenTofu, ensuring reproducibility, auditability, and infrastructure consistency.
-
-Impact
-Metric	Before	After
-Zero Trust Score	0/100	95/100
-Network Policies	0	26
-Falco Alerts	202	116
-API Violations	75	21
-Risk Level	Critical	Low
-Architecture
-flowchart TB
-
-    subgraph Kubernetes Cluster
-        F[Falco Runtime Security]
-        C[Cilium eBPF]
-        H[Hubble Flows]
+    subgraph Telemetry
+        F[Falco]
+        C[Cilium]
+        H[Hubble]
     end
 
-    subgraph AOF Agents
-        SRE[SRE-FinOps Agent]
-        SEC[Security Agent]
-        CORR[Correlation Agent]
-        ZT[Zero Trust Agent]
-        POL[Cilium Policy Generator]
+    subgraph Agents
+        S[SRE]
+        SE[Security]
+        ZT[Zero Trust]
+        P[Policy Generator]
+        CO[Correlation]
     end
 
-    subgraph AI Layer
-        LLM[Groq LLM]
-        PHX[Arize Phoenix]
+    subgraph AI
+        G[Groq]
+        PH[Phoenix]
     end
 
     subgraph IaC
         TF[OpenTofu]
     end
 
-    F --> SEC
-    C --> SEC
-    H --> POL
+    F --> SE
+    C --> SE
+    H --> P
 
-    SRE --> CORR
-    SEC --> CORR
+    S --> CO
+    SE --> CO
 
-    SEC --> ZT
+    SE --> ZT
     H --> ZT
-    C --> ZT
 
-    POL --> LLM
+    P --> G
 
-    CORR --> PHX
-    ZT --> PHX
-    POL --> PHX
+    CO --> PH
+    ZT --> PH
 
     TF --> C
-    TF --> F
-Agent Ecosystem
-SRE-FinOps Agent
 
-Port: 8001
 
-Monitors Kubernetes workloads and correlates operational issues with infrastructure cost.
+    AOF continuously evaluates Kubernetes runtime security posture using
+specialized agents that consume Falco alerts, Cilium policies and Hubble
+network flows to generate Zero Trust assessments and remediation plans.
 
-Capabilities
 
-Pod health analysis
-Restart investigation
-Resource consumption review
-FinOps recommendations
-Log inspection
-Security Agent
 
-Port: 8004
+## Highlights
 
-Aggregates Falco and Cilium findings to provide a consolidated security posture assessment.
+- 5 specialized A2A agents
+- Real Falco runtime alerts
+- Cilium + Hubble flow analysis
+- OpenTofu managed security controls
+- Arize Phoenix observability
+- LLM-as-Judge evaluation pipeline
+- Automated NetworkPolicy generation
 
-Capabilities
+## Results
 
-Runtime threat analysis
-RBAC auditing
-Security trend reporting
-Cost-aware risk evaluation
-Correlation Agent
+| Metric | Result |
+|----------|----------|
+| Zero Trust Score | 95/100 |
+| Network Policies | 26 |
+| Falco Noise Reduction | 42% |
+| API Violations Reduction | 72% |
+| Monthly LLM Cost | ~$5.38 |
 
-Port: 8003
 
-Correlates operational and security signals into a unified risk model.
+## Stack
 
-Capabilities
+Runtime Security
+- Falco
 
-Risk scoring
-Impact analysis
-Optimization opportunities
-Executive summaries
-Zero Trust Agent
+Network Security
+- Cilium
+- Hubble
 
-Port: 8005
+AI
+- Groq
+- BeeAI
 
-Computes a continuous Zero Trust score using live cluster telemetry.
-
-Inputs
-
-Falco alerts
-Cilium policies
-Hubble flows
-Workload security context
-Cilium Policy Generator
-
-Port: 8006
-
-Generates Kubernetes NetworkPolicies from observed traffic patterns using LLM reasoning.
-
-Outputs
-
-Least-privilege policies
-Namespace isolation
-Service communication maps
-Zero Trust recommendations
 Observability
+- Phoenix
+- OpenTelemetry
 
-All agents are instrumented through OpenTelemetry and Arize Phoenix.
+Infrastructure
+- OpenTofu
 
-Features
-Distributed tracing
-LLM-as-Judge evaluations
-Cost analytics
-Latency monitoring
-Failure tracking
-Agent interaction graphs
-Infrastructure as Code
-infrastructure/
-├── main.tf
-├── variables.tf
-├── deny-all.tf
-├── allow-dns.tf
-├── aof-agents.tf
-├── falco-rbac.tf
-└── outputs.tf
-Apply Infrastructure
-cd infrastructure
+Platform
+- Kubernetes
+- Python
 
-tofu init
-tofu plan
-tofu apply
+estrutura
 
-Managed Resources:
-
-Network Policies
-RBAC
-Namespace isolation
-DNS controls
-Agent communication policies
-Technology Stack
-Layer	Technology
-Runtime Security	Falco
-Network Security	Cilium + Hubble
-AI Agents	BeeAI A2A
-LLM	Groq Llama 3.3 70B
-Observability	Arize Phoenix
-IaC	OpenTofu
-Tracing	OpenTelemetry
-Runtime	Kubernetes (k3s)
-Language	Python 3.12
-Project Structure
-agent-wasm-saas/
+aof/
 
 ├── sre-agent/
 ├── security-agent/
@@ -188,46 +110,11 @@ agent-wasm-saas/
 ├── cilium-policy-agent/
 
 ├── infrastructure/
-
-├── phoenix_tracer.py
-├── cost_tracker.py
-├── anomaly_monitor.py
+├── observability/
 
 ├── orchestrator.py
 
-├── start-all.sh
-└── test-all.sh
-Results
+└── start-all.sh
 
-Validated on a real Kubernetes environment running:
 
-Knative
-Istio
-Cert-Manager
-Custom Microservices
-Achievements
-Zero Trust Score: 95/100
-26 NetworkPolicies deployed
-42% Falco noise reduction
-72% API violation reduction
-Full IaC governance
-End-to-end AI observability
-Roadmap
-Phase 1
-Multi-agent orchestration
-Zero Trust scoring
-Phoenix observability
-OpenTofu integration
-Phase 2
-Autonomous remediation
-Stateful memory
-Long-term risk analysis
-Phase 3
-Multi-cluster support
-Policy marketplace
-Security copilot dashboard
-License
 
-MIT License
-
-Built with Kubernetes, eBPF, OpenTofu, Falco, Cilium and AI Agents.
